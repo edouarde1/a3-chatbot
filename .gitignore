@@ -2,3 +2,4 @@ bot/data_utils/__pycache__
 bot/__pycache__
 bot/credentials.json
 bot/tweet_cred.yaml
+bot/creds.env

@@ -1,5 +1,0 @@
-search_tweets_api:
-  account_type: enterprise
-  endpoint: GET /2/tweets/search/recent
-  consumer_key: 2mBhkjbc4xAeLlPsKmXeTxnAx
-  consumer_secret: NIj81QOnWf9ggRL2tvrH5KQEQ1PgFT2sTiQsjJ80QlIVPhVo75

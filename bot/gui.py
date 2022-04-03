@@ -1,7 +1,9 @@
 import sys
 import tkinter as tk
+from twitter_api import print_tweets,twitter_client
 import botbot
 import translate
+import twitter_api
 
 
 # Class for the Bot GUI
@@ -68,20 +70,28 @@ class ChatScreen(tk.Frame):
             userInput = userInput.replace(char,' ')
         # Pass input through spell checking module
         input = botbot.spell_check(userInput)
-        # Get response from bot & update response label
     
         # Translate only if not enlish
         if lang == "en":
             self.response = botbot.get_response(input)
         else: 
             self.response = translate.translate_text(lang,botbot.get_response(input))
-
+       
+        # Get response from bot & update response label
         print("Response", self.response)
         self.responseLabel["text"] = self.response
 
-    def show_help_popup(self):
+    def get_tweets(self,topic, lang):
         self.responseLabel["text"] = "Welcome, Adventurer! Please enter your question below.\n When you are done, " \
                                      "please end your question with a '?' and hit the 'Send' button below!"
+        
+        client = twitter_client()
+
+        self.response = print_tweets(topic,client)
+
+        
+
+                                     
 
     def __init__(self, master, lang):
 
@@ -106,8 +116,8 @@ class ChatScreen(tk.Frame):
         # Bottom row of buttons
         tk.Button(self, text="Send",
                   command=lambda: self.retrieve_user_message(userInputField,lang)).pack(side="left")
-        tk.Button(self, text="Help",
-                  command=lambda: self.show_help_popup()).pack(side="left")
+        tk.Button(self, text="Ask Twitter",
+                  command=lambda: self.get_tweets(userInputField,lang)).pack(side="left")
         tk.Button(self, text="Back",
                   command=lambda: master.switch_frame(HomeScreen)).pack(side="left")
 
