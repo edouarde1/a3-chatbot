@@ -20,15 +20,34 @@ This bot requires nltk, pyspechecker, and stanza in order to run properly. If yo
     
 Then you have to run py_lib_install.py so python can install the additional libraries. 
 
+## API Authentication
+### Google Translate 
+1. Create a Google Cloud platform project with the Google Cloud Translation API enabled. For help with this task please refer to [Create a project and enable the API](https://developers.google.com/workspace/guides/create-project).
+2.  Create and download authorization credentials and move file into the 'bot' directory. Then, modify the name of credentials file to 'credentials.json' 
+3.  In your in terminal type: 
+   'export GOOGLE_APPLICATION_CREDENTIALS= /path/to/credentials.json'
+
+### Twitter API
+  1. Sign-up for a Twitter developer account, create a new project, and set up an application. For help with this task please refer to [Sign-up for a developer account](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api) and [Create a project](https://developer.twitter.com/en/docs/projects/overview)
+  2. Change access level of project from 'essential access' to 'elevated access'. For help with this task refer to [Access Levels](https://developer.twitter.com/en/docs/twitter-api/getting-started/about-twitter-api)
+  3. Inside of the 'bot' directory create a .env folder which should include four authentication tokens. <br><br> The format should go as follows: <br><br>CONSUMER_KEY= {Insert key here}<br>
+                  CONSUMER_SECRET= {Insert key here}<br>
+                  ACCESS_TOKEN= {Insert  key here}<br>
+                  ACCESS_TOKEN_SECRET= {Insert key here} <br> 
+
+
+
+
+
 ## Dataset 
 This bot pulls from a json file with specifically designed responses for who, what, where, when, why style responses. Essentially, this bot smartly translates user text into queries to generate aproprait responses. 
 
 ## Classes and Functions 
 
-### aBot.py 
+## botbot.py 
 This directory includes all the files for the bot. 
 
-#### get_response
+### get_response
 This function recieves the keyword dictionary, asks for user input, and returns chat bot responses. User input is processed using `get_query_objects()`, which extracts nouns and proper nouns. A for-loop iterates through each processed noun in a list and detects if the word exists in entity_dict.json. If there is a match, that means there is a chat bot response for the keyword. If there is no keyword detected in the user response, then the bot returns "Sorry can't help provide any information that relates to [*whatever related noun the user entered*]". 
 
 Parameters:
@@ -38,7 +57,7 @@ Parameters:
 Returns:
 - output: a string containing the bots response
 
-#### spell_check
+### spell_check()
 Takes a string and returns a string with closest related permutation that is part of the english language.
 
  Parameter:
@@ -47,7 +66,19 @@ Takes a string and returns a string with closest related permutation that is par
  Returns:
  - correct: a corrected string output 
     
-### gui.py
+## tranlate.py 
+This python module handles text translation
+
+### translate_text()
+
+This function takes an input and will translate the input into a target language. The translated input is then returned. 
+ 
+Parameters: 
+- target: String of the for the target language. Can be "en", "fr", or "es"
+- text: String of text to be translated 
+Returns: 
+- text: String of translated text 
+## gui.py
 
 ### BotGUI(tk.Tk)
 The class which handles window switching and displays the alternate screens
@@ -55,17 +86,25 @@ The class which handles window switching and displays the alternate screens
 #### HomeScreen (class)
 The main title screen that shows when loading the application. 
 
+#### LanguageScreen(class)
+This window allows the user to select the language for the chat bot 
 #### ChatSreen (class)
 The class that manages the chatscreen. 
-
 ##### retrieve_user_message(inputField)
 gets user input, and then passes the input to the bot for processing. Recieves the updated bot response, and updates the GUI with the new response.
 
 Parameters:
 - inputField: a string which determins what field to be inputed
 
-#### show_help_popup
-Just passes a string along to the responseLablel in order to display the basic welcome prompt
+#### get_tweets(self,inputField, lang)
+This function recieves the user user input and queries input into the twitter  api. Which is then translated and output to console. 
+
+Parameters: 
+- inputField: a string which determines what field input
+- lang: language target ("en","fr",or "es")
+
+Returns
+- None
 
 ### data_load.py
 For managing data and searching
@@ -135,8 +174,6 @@ Returns
  - questList: list of adverbs associated with said noun
 
 
-### unitTest.py  FIX THIS 
-
 #### test_spell_check
 Tests functionality of `spell_check()` function in bot.py
 
@@ -148,14 +185,10 @@ Tests functionality of `load_data()`
 
 ## New Features
 
-### Spell Checking
+### Translation 
 
-Spell checking was used in order to improve the overall robustness of our chatbot. Incorrectly spelt words are recognized by our system, and replaced with what is assumed to be the most likley word that the user intended to input. This allows our bot to handle a wide variety of cases that it previously was unable to.
+This chat bot now makes use of the Google Cloud Translate API. The bot is able to speak in english, french, or spanish. When the user accesses the chat bot they are promted to a language selection screen where they may select the language of choice. For now the bot only accecpts english queries  and can respond in any of the three languages. 
 
-### Synonym Detection
+### Twitter 
 
-Synonym detection was used in our chatbot in order to improve the greeting function. Rather than hardcode a large if statement containing some number of standard greetings, we used synonym detection to recognize when a greeting word was input, in order to then output the bots standard greeting.
-
-### POS Tagging, Tokenization & Segmentation
-
-In order to better suit the keyword style bot that we have created, we needed to implement a way of understanding sentences that were input, and extract the necessary information required to generate a query that the bot can use to get a response. To do this, we used POS tagging, tokenization, and segmentation. These systems work together to process questions asked, and provide us with a query in the form of \<Noun\> \<Descriptor\> which we use to generate much more intricate and conversational dialogue.
+The chat bot can access Twitter using the Twitter API. If the user is not getting the right reponses from the chat bot the user may select the 'Ask Twitter' button which enables them to send their query directly to twitter. The API will respond with the most recent tweet related to the query. 

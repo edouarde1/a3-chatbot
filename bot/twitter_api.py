@@ -1,4 +1,6 @@
+from distutils.filelist import translate_pattern
 import tweepy
+from translate import translate_text
 from decouple import config
 
 def twitter_client():
@@ -15,9 +17,19 @@ def twitter_client():
 
 
 
-def print_tweets(topic, client): 
+def print_tweets(topic, client,lang): 
 
-    tweets = client.search_tweets("Where is atlantis ?",count=3)
-
-    for tweet in tweets:
+    tweets = client.search_tweets(topic,count=1)
+    response = ""
+    
+    for tweet in tweets: 
         print(tweet.text)
+        response = "Here is a tweet that my help you search: " + tweet.text
+    
+    #UPDATE WITH TRANSLATION
+    if lang != "en":
+        response = translate_text(lang,response)
+
+    return response
+
+    

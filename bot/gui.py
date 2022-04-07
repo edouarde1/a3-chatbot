@@ -81,13 +81,24 @@ class ChatScreen(tk.Frame):
         print("Response", self.response)
         self.responseLabel["text"] = self.response
 
-    def get_tweets(self,topic, lang):
-        self.responseLabel["text"] = "Welcome, Adventurer! Please enter your question below.\n When you are done, " \
-                                     "please end your question with a '?' and hit the 'Send' button below!"
+    def get_tweets(self,inputField, lang):
         
+        # Retrieve user input and save it
+        userInput = inputField.get("1.0", tk.END)
+        # Clear input box
+        inputField.delete("1.0", tk.END)
+        # Remove unnecessary punctuation
+        punctuation = '!()-[]{};:\,<>./?@#$%^&*_~'
+        for char in punctuation:
+            userInput = userInput.replace(char,' ')
+        # Pass input through spell checking module
+        input = botbot.spell_check(userInput)
+    
         client = twitter_client()
 
-        self.response = print_tweets(topic,client)
+        self.response = print_tweets(input,client,lang)
+
+        self.responseLabel["text"] = self.response
 
         
 
@@ -95,6 +106,7 @@ class ChatScreen(tk.Frame):
 
     def __init__(self, master, lang):
 
+    
         if lang == "fr":
             self.response = "Bienvenue, aventurier! Veuillez demander votre question.\n Lorsque vous avez terminé, veuillez terminer votre " \
                         "question avec un '?' et appuyez sur le bouton 'Envoyer' !" 
@@ -112,6 +124,7 @@ class ChatScreen(tk.Frame):
         self.responseLabel.pack(side="top", fill="x", pady=10)
         userInputField = tk.Text(self)
         userInputField.pack(side="top", fill="x", pady=10)
+       
        
         # Bottom row of buttons
         tk.Button(self, text="Send",
