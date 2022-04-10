@@ -185,10 +185,10 @@ Tests functionality of `load_data()`
 
 ## New Features
 
-### Translation 
+### Translation
 
-This chat bot now makes use of the Google Cloud Translate API. The bot is able to speak in english, french, or spanish. When the user accesses the chat bot they are promted to a language selection screen where they may select the language of choice. For now the bot only accecpts english queries  and can respond in any of the three languages. 
+This chat bot now makes use of the Google Cloud Translate API. The bot can speak in English, French, or Spanish. When the user accesses the chat bot, they are prompted to a language selection screen where they may select the language of choice. Once the language selection is made the chat bot greets the user with the language of choice. All the chat bot's responses are translated from English to the user selected language. One of the limitations of this API implementation is that certain characters from all languages do not appear on the GUI properly. Also, the chat bot only accepts English queries and will only respond in a different language. When using this API the user must use the correct credentials, instructions on how to do this are found above.
 
-### Twitter 
+### Twitter
 
-The chat bot can access Twitter using the Twitter API. If the user is not getting the right reponses from the chat bot the user may select the 'Ask Twitter' button which enables them to send their query directly to twitter. The API will respond with the most recent tweet related to the query. 
+The chat bot can access Twitter using the Twitter API. If the user is not getting the right responses from the chat bot the user may select the 'Ask Twitter' button which enables them to send their query directly to twitter. The API will respond with the most recent tweet related to the query. This API functions well and make give no response if the twitter API does not find a related tweet.
